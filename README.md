@@ -20,5 +20,28 @@ SELECT (
 ORDER BY id
 
 Problem 3 : Tree Node		(https://leetcode.com/problems/tree-node/ )
+Solution:
+
+Select id, (
+    CASE
+        when p_id IS Null 
+        then "Root"
+        when id In (Select Distinct p_id from tree ) then "Inner"
+        else "Leaf"
+    end) AS type
+from Tree
+order by id ASC
 
 Problem 4 : Deparment Top 3 Salaries		(https://leetcode.com/problems/department-top-three-salaries/ )
+Solution:
+
+SELECT d.name AS Department, e.name AS Employee, e.salary AS Salary
+FROM Employee e
+JOIN Department d ON e.departmentId = d.id
+WHERE 3 > (
+    SELECT COUNT(DISTINCT e2.salary)
+    FROM Employee e2
+    WHERE e2.departmentId = e.departmentId
+      AND e2.salary > e.salary
+)
+ORDER BY d.name, e.salary DESC;
